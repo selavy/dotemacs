@@ -14,6 +14,23 @@
 ; enable semantic
 (semantic-mode 1)
 
+(require 'semantic/ia)
+(require 'semantic/bovine/gcc)
+; add boost - will need to update this each time i move
+(semantic-add-system-include "/opt/boost/include/boost-1_56" 'c++-mode)
+
+(when (cedet-gnu-global-version-check t)
+      (semantic-enable-gnu-global-databases 'c-mode)
+      (semantic-enable-gnu-global-databases 'c++-mode))
+
+(global-ede-mode t)
+(ede-cpp-root-project "Tradebot"
+                      :name "Tradebot C++"
+                      :file "~/source/tradebot/CMakeLists.txt"
+                      :include-path '("/"
+                                      "~/source/tradebot/vc"
+                                      ))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
