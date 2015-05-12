@@ -1,0 +1,39 @@
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes (quote (tango-dark)))
+ '(diff-switches "-u")
+ '(inhibit-startup-screen t))
+
+;;; uncomment for CJK utf-8 support for non-Asian users
+;; (require 'un-define)
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+(setq-default indent-tabs-mode nil)
+(setq tab-width 4)
+(setq c-default-style "stroustrup" c-basic-offset 4)
+
+;(add-to-list 'completion-at-point-functions 'semantic-completion-at-point-function)
+;
+;(defun cd-spooler-dir ()
+;  (interactive)
+;  (setq default-directory "~/source/tradebot/vc/libtb_spooler/"))
+;
+;(defun cd-flex-dir ()
+;  (interactive)
+;  (setq default-directory "~/source/tradebot/vc/tb_ftop_quote_svc/flex/"))
+;
+;(defun cd-calc-dir ()
+;  (interactive)
+;  (setq default-directory "~/source/tradebot/vc/tb_ftop_quote_svc/calc_svc/"))
+;
+;(defun cd-cpp-dir ()
+;  (interactive)
+;  (setq default-directory "~/source/tradebot/vc/"))

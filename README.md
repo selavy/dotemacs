@@ -10,3 +10,6 @@ git clone --recursive https://github.com/selavy/dotemacs
 
 
 git submodule update --remote
+
+cd ~
+ln -s ~/dotemacs/dotemacs .emacs
