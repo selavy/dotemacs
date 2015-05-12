@@ -14,6 +14,16 @@
 ; enable semantic
 (semantic-mode 1)
 
+
+(add-to-list 'load-path "~/dotemacs/async")
+(add-to-list 'load-path "~/dotemacs/helm")
+(require 'helm-config)
+(helm-autoresize-mode 1)
+(add-to-list 'load-path "~/dotemacs/function-args")
+(require 'function-args)
+
+(fa-config-default)
+
 (require 'semantic/ia)
 (require 'semantic/bovine/gcc)
 ; add boost - will need to update this each time i move
@@ -33,6 +43,9 @@
                       :include-path '("/"
                                       "~/source/tradebot/vc"
                                       ))
+
+(add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode)) ; put c++-mode as default for *.h
+(add-to-list 'auto-mode-alist '("\\.hpp\\'" . c++-mode)) ; put c++-mode as default for *.hpp
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
