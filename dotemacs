@@ -1,4 +1,8 @@
 (load-file "~/dotemacs/cedet/cedet-devel-load.el")
+(add-to-list 'load-path "~/dotemacs/async")
+(add-to-list 'load-path "~/dotemacs/helm")
+(add-to-list 'load-path "~/dotemacs/golden-ratio.el")
+(add-to-list 'load-path "~/dotemacs/function-args")
 
 ; init submodes
 (add-to-list 'semantic-default-submodes 'global-semanticdb-minor-mode)
@@ -13,13 +17,11 @@
 
 ; enable semantic
 (semantic-mode 1)
-
-
-(add-to-list 'load-path "~/dotemacs/async")
-(add-to-list 'load-path "~/dotemacs/helm")
 (require 'helm-config)
-(helm-autoresize-mode 1)
-(add-to-list 'load-path "~/dotemacs/function-args")
+
+(require 'golden-ratio)
+(golden-ratio-mode 1)
+;(helm-autoresize-mode 1)
 (require 'function-args)
 
 (fa-config-default)
