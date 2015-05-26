@@ -1,50 +1,54 @@
 (load-file "~/dotemacs/cedet/cedet-devel-load.el")
-(add-to-list 'load-path "~/dotemacs/async")
-(add-to-list 'load-path "~/dotemacs/helm")
+;(add-to-list 'load-path "~/dotemacs/async")
+;(add-to-list 'load-path "~/dotemacs/helm")
 (add-to-list 'load-path "~/dotemacs/golden-ratio.el")
-(add-to-list 'load-path "~/dotemacs/function-args")
+;(add-to-list 'load-path "~/dotemacs/function-args")
+;(add-to-list 'load-path "~/dotemacs/company-mode")
 
 ; init submodes
-(add-to-list 'semantic-default-submodes 'global-semanticdb-minor-mode)
-(add-to-list 'semantic-default-submodes 'global-semantic-mru-bookmark-mode)
-(add-to-list 'semantic-default-submodes 'global-semantic-highlight-func-mode)
-(add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
-(add-to-list 'semantic-default-submodes 'global-semantic-decoration-mode)
-(add-to-list 'semantic-default-submodes 'global-semantic-idle-local-symbol-highlight-mode)
-(add-to-list 'semantic-default-submodes 'global-semantic-idle-scheduler-mode)
-(add-to-list 'semantic-default-submodes 'global-semantic-idle-completions-mode)
-(add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode)
+;(add-to-list 'semantic-default-submodes 'global-semanticdb-minor-mode)
+;(add-to-list 'semantic-default-submodes 'global-semantic-mru-bookmark-mode)
+;(add-to-list 'semantic-default-submodes 'global-semantic-highlight-func-mode)
+;(add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
+;(add-to-list 'semantic-default-submodes 'global-semantic-decoration-mode)
+;(add-to-list 'semantic-default-submodes 'global-semantic-idle-local-symbol-highlight-mode)
+;(add-to-list 'semantic-default-submodes 'global-semantic-idle-scheduler-mode)
+;(add-to-list 'semantic-default-submodes 'global-semantic-idle-completions-mode)
+;(add-to-list 'semantic-default-submodes 'global-semantic-idle-summary-mode)
 
 ; enable semantic
-(semantic-mode 1)
-(require 'helm-config)
+;(semantic-mode 1)
+;(require 'helm-config)
 
+;(require 'company)
+
+; golden-ratio screen sizes
 (require 'golden-ratio)
 (golden-ratio-mode 1)
 ;(helm-autoresize-mode 1)
-(require 'function-args)
+;(require 'function-args)
 
-(fa-config-default)
+;(fa-config-default)
 
-(require 'semantic/ia)
-(require 'semantic/bovine/gcc)
+;(require 'semantic/ia)
+;(require 'semantic/bovine/gcc)
 ; add boost - will need to update this each time i move
-(semantic-add-system-include "/opt/boost/include/boost-1_56" 'c++-mode)
+;(semantic-add-system-include "/opt/boost/include/boost-1_56" 'c++-mode)
 
-(when (cedet-gnu-global-version-check t)
-      (semantic-enable-gnu-global-databases 'c-mode)
-      (semantic-enable-gnu-global-databases 'c++-mode))
+;(when (cedet-gnu-global-version-check t)
+;      (semantic-enable-gnu-global-databases 'c-mode)
+;      (semantic-enable-gnu-global-databases 'c++-mode))
 
-(semantic-load-enable-code-helpers) ; enable prototype help and smart completion
+;(semantic-load-enable-code-helpers) ; enable prototype help and smart completion
 (global-srecode-minor-mode 1) ; enable template insertion menu
 
-(global-ede-mode t) ; enable projects
-(ede-cpp-root-project "Tradebot"
-                      :name "Tradebot C++"
-                      :file "~/source/tradebot/CMakeLists.txt"
-                      :include-path '("/"
-                                      "~/source/tradebot/vc"
-                                      ))
+;(global-ede-mode t) ; enable projects
+;(ede-cpp-root-project "Tradebot"
+;                      :name "Tradebot C++"
+;                      :file "~/source/tradebot/CMakeLists.txt"
+;                      :include-path '("/"
+;                                      "~/source/tradebot/vc"
+;                                      ))
 
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode)) ; put c++-mode as default for *.h
 (add-to-list 'auto-mode-alist '("\\.hpp\\'" . c++-mode)) ; put c++-mode as default for *.hpp

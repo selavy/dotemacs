@@ -13,3 +13,6 @@
 [submodule "golden-ratio.el"]
 	path = golden-ratio.el
 	url = https://github.com/abo-abo/golden-ratio.el
+[submodule "company-mode"]
+	path = company-mode
+	url = https://github.com/company-mode/company-mode
