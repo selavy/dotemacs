@@ -4,19 +4,102 @@
 (add-to-list 'load-path "~/dotemacs/golden-ratio.el")
 ;(add-to-list 'load-path "~/dotemacs/function-args")
 ;(add-to-list 'load-path "~/dotemacs/company-mode")
+(add-to-list 'load-path "~/dotemacs/web-mode")
+(add-to-list 'load-path "~/dotemacs/solarized")
+
+(add-to-list 'custom-theme-load-path "~/dotemacs/theme")
+
+(setq frame-title-format '(buffer-file-name "%b [%f]" "%b"))
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(menu-bar-mode -1)
+(tooltip-mode -1)
+(setq inhibit-startup-screen                t
+      inhibit-startup-message               t
+      line-number-mode                      t
+      column-number-mode                    t
+      icomplete-mode                        t
+      read-buffer-completion-ignore-case    t
+      read-file-name-completion-ignore-case t
+      color-theme-is-global                 t
+      save-place                            t)
+
+;  '(custom-enabled-themes (quote (tango-dark)))
+;(setq custom-enabled-theme (quote (solarized-dark)))
+
+;(load-theme 'solarized-light t)
+;(load-theme 'solarized-dark t)
+      
 
 (require 'package)
-(add-to-list 'package-archives
-    '("melpa" . "http://melpa.milkbox.net/packages/") t)
+;(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
+(when (< emacs-major-version 24) (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
+(package-initialize)
+
+; (require 'solarized)
+; (defun sk-solarized-childtheme ()
+;   (custom-theme-set-faces
+;    theme-name
+;    ;; Modeline and powerline
+;    `(mode-line           ((,class (:foreground ,solarized-bg
+;                                                :background ,blue :box nil))))
+;    `(mode-line-inactive  ((,class (:foreground ,solarized-bg
+;                                                :background ,blue-d :box nil))))
+;    `(mode-line-buffer-id ((,class (:foreground ,solarized-bg :box nil))))
+;    `(powerline-active1   ((,class (:background "gray25"))))
+;    `(powerline-inactive1 ((,class (:background "gray25"))))
+;    `(powerline-active2   ((,class (:background "gray40"))))
+;    `(powerline-inactive2 ((,class (:background "gray40"))))
+;    `(which-func ((,class (:foreground ,magenta :weight bold))))
+;    `(header-line         ((,class (:background ,solarized-bg
+;                                                :foreground ,solarized-fg
+;                                                :underline nil
+;                                                :overline nil))))
+;    ;; Change some org faces
+;    `(org-document-title        ((,class (:foreground ,blue-hc :weight bold))))
+;    `(org-document-info         ((,class (:foreground ,blue-hc))))
+;    `(org-document-info-keyword ((,class (:foreground ,blue-lc))))
+;    `(org-table ((,class (:foreground ,blue-d))))
+;    `(org-level-1 ((,class (:foreground ,orange))))
+;    `(org-level-2 ((,class (:foreground ,green))))
+;    `(org-level-3 ((,class (:foreground ,blue))))
+;    `(org-level-4 ((,class (:foreground ,yellow))))
+;    `(org-level-5 ((,class (:foreground ,cyan))))
+;    `(org-level-6 ((,class (:foreground ,green))))
+;    `(org-level-7 ((,class (:foreground ,red))))
+;    `(org-level-8 ((,class (:foreground ,blue))))
+;    ;; Autocomplete faces
+;    `(ac-candidate-face ((,class (:background ,solarized-hl :foreground ,yellow))))
+;    `(ac-selection-face ((,class (:background ,yellow-lc :foreground ,yellow-hc))))
+;    `(ac-candidate-mouse-face ((,class (:background ,yellow-hc :foreground ,yellow-lc))))
+;    `(ac-completion-face ((,class (:foreground ,solarized-emph :underline t))))
+;    `(ac-gtags-candidate-face ((,class (:background ,solarized-hl :foreground ,blue))))
+;    `(ac-gtags-selection-face ((,class (:background ,blue-lc :foreground ,blue-hc))))
+;    `(ac-yasnippet-candidate-face ((,class (:background ,solarized-hl :foreground ,orange))))
+;    `(ac-yasnippet-selection-face ((,class (:background ,orange-lc :foreground ,orange-hc))))
+;    ;; Linum & fringe
+;    `(linum  ((,class (:foreground ,solarized-comments :background ,solarized-bg))))
+;    `(fringe ((,class (:foreground ,solarized-comments :background ,solarized-bg))))
+;    ))
+
+(set-default 'indicate-empty-lines t)
 
 (require 'dired-x)
 (setq-default dired-omit-files-p t)
 (setq dired-omit-files (concat dired-omit-files "\\|^\\..+$"))
 
 ; enable ggtags
-(add-hook 'c-mode-common-hook (lambda ()
-    (when (derived-mode-p 'c-mode 'c++-mode 'java-mode 'asm-mode)
-        (ggtags-mode 1))))                     
+(add-hook 'c-mode-common-hook (lambda () (when (derived-mode-p 'c-mode 'c++-mode) (ggtags-mode 1))))                  
+
+; cpputils-cmake
+(add-hook 'c-mode-common-hook (lambda () (if (derived-mode-p 'c-mode 'c++-mode) (cppcm-reload-all))))
+(setq cppcm-build-dirname "tradebot_build/debug_shared")
+
+; send notification when compilation is done
+(defun compile-notify (buffer message) (sk-popup "Emacs compilation" message))
+(setq compilation-finish-function 'compile-notify)
 
 ; jump to corresponding header or implementation file
 (add-hook 'c-mode-common-hook (lambda () (local-set-key (kbd "C-c o") 'ff-find-other-file)))
@@ -25,6 +108,67 @@
     (lambda ()
     ;; Default indentation is 2 spaces, change to 4
         (set (make-local-variable 'sgml-basic-offset) 4)))
+
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.xslt\\'" . web-mode))
+(defun my-web-mode-hook ()
+  "Hooks for Web mode."
+  (setq web-mode-markup-indent-offset 4)
+)
+(add-hook 'web-mode-hook  'my-web-mode-hook)
+
+(require 'powerline)
+(defun sk-powerline-default-theme ()
+  "Starter-kit default mode-line."
+  (interactive)
+  (setq-default mode-line-format
+                '("%e"
+                  (:eval
+                   (let* ((active (powerline-selected-window-active))
+                          (mode-line (if active 'mode-line 'mode-line-inactive))
+                          (face1 (if active 'powerline-active1
+                                   'powerline-inactive1))
+                          (face2 (if active 'powerline-active2
+                                   'powerline-inactive2))
+                          (lhs (list
+                                (powerline-raw "%*" nil 'l)
+                                (powerline-buffer-size nil 'l)
+
+                                ;;(powerline-raw mode-line-mule-info nil 'l)
+                                (powerline-buffer-id nil 'l)
+
+                                (powerline-raw " ")
+                                (powerline-arrow-left mode-line face1)
+
+                                (powerline-major-mode face1 'l)
+                                (powerline-process face1)
+                                (powerline-minor-modes face1 'l)
+                                (powerline-narrow face1 'l)
+
+                                (powerline-raw " " face1)
+                                (powerline-arrow-left face1 face2)
+
+                                (powerline-vc face2)))
+                          (rhs (list
+                                (powerline-raw global-mode-string face2 'r)
+
+                                (powerline-arrow-left face2 face1)
+
+                                (powerline-raw "%4l" face1 'l)
+                                (powerline-raw ":" face1 'l)
+                                (powerline-raw "%3c" face1 'r)
+
+                                (powerline-arrow-left face1 mode-line)
+                                (powerline-raw " ")
+
+                                (powerline-raw "%6p" nil 'r)
+                                )))
+                     (concat
+                      (powerline-render lhs)
+                      (powerline-fill face2 (powerline-width rhs))
+                      (powerline-render rhs)))))))
+(sk-powerline-default-theme)
 
 ; init submodes
 ;(add-to-list 'semantic-default-submodes 'global-semanticdb-minor-mode)
@@ -74,14 +218,15 @@
 (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode)) ; put c++-mode as default for *.h
 (add-to-list 'auto-mode-alist '("\\.hpp\\'" . c++-mode)) ; put c++-mode as default for *.hpp
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (tango-dark)))
- '(diff-switches "-u")
- '(inhibit-startup-screen t))
+; (custom-set-variables
+;  ;; custom-set-variables was added by Custom.
+;  ;; If you edit it by hand, you could mess it up, so be careful.
+;  ;; Your init file should contain only one such instance.
+;  ;; If there is more than one, they won't work right.
+;  '(initial-frame-alist (quote ((fullscreen . maximized))))
+;  '(custom-enabled-themes (quote (tango-dark)))
+;  '(diff-switches "-u")
+;  '(inhibit-startup-screen t))
 
 ;;; uncomment for CJK utf-8 support for non-Asian users
 ;; (require 'un-define)
@@ -90,7 +235,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(default ((t (:family "DejaVu Sans Mono" :foundry "unknown" :slant normal :weight normal :height 98 :width normal)))))
 
 (setq-default indent-tabs-mode nil)
 (setq tab-width 4)
@@ -118,3 +263,49 @@
 (global-set-key [f6] (lambda () (interactive) (dired "~/source/tradebot/python/tb/progs")))
 (global-set-key [f7] (lambda () (interactive) (dired "~/source/tradebot/process_param")))
 (global-set-key [f8] (lambda () (interactive) (dired "~/source/tradebot/process_param_test")))
+(put 'upcase-region 'disabled nil)
+
+(setq temporary-file-directory "/tmp/emacs")
+(unless (file-exists-p temporary-file-directory)
+        (make-directory temporary-file-directory))
+(setq save-place-file              (concat temporary-file-directory "places"))
+(setq recentf-save-file            (concat temporary-file-directory "recentf"))
+(setq smex-save-file               (concat temporary-file-directory "smex-items"))
+(setq ido-save-directory-list-file (concat temporary-file-directory "ido.last"))
+(setq ac-comphist-file             (concat temporary-file-directory "ac-comphist.dat"))
+(setq auto-save-list-file-prefix   (concat temporary-file-directory "auto-save-list/" ".auto-saves-"))
+(setq auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+(setq backup-directory-alist         `(("." . ,(concat temporary-file-directory "backups"))))
+(setq desktop-dirname             (concat temporary-file-directory "session")
+      desktop-base-file-name      "emacs.desktop"
+      desktop-base-lock-name      "lock"
+      desktop-path                (list desktop-dirname)
+      desktop-save                t
+      desktop-files-not-to-save   "^$" ;reload tramp paths
+      desktop-restore-frames      nil
+      desktop-load-locked-desktop nil)
+(unless (file-exists-p desktop-dirname)
+  (make-directory desktop-dirname))
+(desktop-save-mode 0)
+
+(set-terminal-coding-system    'utf-8)
+(set-keyboard-coding-system    'utf-8)
+(prefer-coding-system          'utf-8)
+(set-buffer-file-coding-system 'utf-8)
+
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'reverse)
+(setq uniquify-separator "|")
+(setq uniquify-after-kill-buffer-p t) ; rename after killing uniquified
+(setq uniquify-ignore-buffers-re "^\\*") ; don't muck with special buffers
+
+; no indentation within namespace block
+(defconst my-cc-style '("cc-mode" (c-offsets-alist . ((innamespace . [0])))))
+(c-add-style "my-cc-mode" my-cc-style)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes (quote (sanityinc-solarized-dark)))
+ '(custom-safe-themes (quote ("8db4b03b9ae654d4a57804286eb3e332725c84d7cdab38463cb6b97d5762ad26" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "4aee8551b53a43a883cb0b7f3255d6859d766b6c5e14bcb01bed572fcbef4328" "4cf3221feff536e2b3385209e9b9dc4c2e0818a69a1cdb4b522756bcdf4e00a4" default))))
